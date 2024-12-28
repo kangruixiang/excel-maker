@@ -6,6 +6,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { getLocalTimeZone, type DateValue } from '@internationalized/date';
 	import { Button } from '$lib/components/ui/button';
+	import { goto } from '$app/navigation';
 
 	let inputDate = $state<DateValue | undefined>();
 	let numberOfWeeks = $state<number>(52);
@@ -65,37 +66,41 @@
 		// Clean up: remove the link and revoke the URL object
 		document.body.removeChild(link);
 		URL.revokeObjectURL(url);
+
+		goto('/instructions');
 	}
 </script>
 
-<div class="mx-auto my-4 max-w-2xl rounded-lg bg-white p-4">
-	<Card.Root>
-		<Card.Header>
-			<Card.Title>Excel Headers</Card.Title>
-		</Card.Header>
-		<Card.Content>
-			<p>
-				This will generate the header dates for a specified number of weeks including the weekends.
-				An example is seen below:
-			</p>
+<Card.Root>
+	<Card.Header>
+		<Card.Title>Excel Headers</Card.Title>
+	</Card.Header>
+	<Card.Content>
+		<p>
+			This will generate the header dates for a specified number of weeks including the weekends. An
+			example is seen below:
+		</p>
 
-			<img src="header.png" alt="" class="my-4 rounded-md" />
-		</Card.Content>
-		<Card.Content class="space-around flex gap-4">
-			<p class="">Start by picking the first date from the right.</p>
+		<img src="header.png" alt="" class="my-4 rounded-md" />
+	</Card.Content>
+	<Card.Content class="space-around flex gap-4">
+		<p class="">
+			Start by picking the first date from the right. For example, in the 2024-2025 schedule from
+			above, 7/1/2024 is the first date.
+		</p>
 
-			<Calendar type="single" bind:value={inputDate} />
-		</Card.Content>
-		<Card.Content>
-			<div>
-				<p>
-					Next, pick the number of weeks you want to generate headers. Default for a year is 52:
-				</p>
-				<Input type="number" bind:value={numberOfWeeks} class="my-4" />
-			</div>
-		</Card.Content>
-		<Card.Content class="flex justify-end">
-			<Button onclick={() => downloadCSV(makeDateHeader(inputDate, numberOfWeeks))}>Submit</Button>
-		</Card.Content>
-	</Card.Root>
-</div>
+		<Calendar type="single" bind:value={inputDate} />
+	</Card.Content>
+	<Card.Content>
+		<div>
+			<p>Next, pick the number of weeks you want to generate headers. Default for a year is 52:</p>
+			<Input type="number" bind:value={numberOfWeeks} class="my-4" />
+		</div>
+	</Card.Content>
+
+	<Card.Content class="flex justify-end">
+		<Button onclick={() => downloadCSV(makeDateHeader(inputDate, numberOfWeeks))}
+			>Generate Headers</Button
+		>
+	</Card.Content>
+</Card.Root>
